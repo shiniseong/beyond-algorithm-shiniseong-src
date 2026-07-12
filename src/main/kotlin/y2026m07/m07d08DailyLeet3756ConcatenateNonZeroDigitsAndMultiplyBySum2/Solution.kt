@@ -1,5 +1,7 @@
 package y2026m07.m07d08DailyLeet3756ConcatenateNonZeroDigitsAndMultiplyBySum2
 
+import kotlin.math.pow
+
 class Solution {
     fun sumAndMultiply(
         s: String,
@@ -19,16 +21,18 @@ class Solution {
             .filter { it != '0' }
             .map { it.digitToInt() }
 
-        val x = nonZeroDigits
-            .joinToString("")
-            .ifEmpty { "0" }
-            .toBigInteger()
-
         val sum = nonZeroDigits.sum()
 
-        val result = x * sum.toBigInteger()
+        val xSource = nonZeroDigits
+            .joinToString("")
+            .ifEmpty { "0" }
 
-        return (result % MOD.toBigInteger()).toInt()
+        val result = xSource.reversed().mapIndexed { index, ch ->
+            val number = ch.digitToInt() * 10.0.pow(index)
+            (number * sum) % MOD
+        }.sum()
+
+        return (result % MOD).toInt()
     }
 
     companion object {
