@@ -28,7 +28,7 @@ class Solution {
             .ifEmpty { "0" }
 
         val result = xSource.reversed().mapIndexed { index, ch ->
-            val number = ch.digitToInt() * 10.0.pow(index)
+            val number = ch.digitToInt() * (10.0.pow(index)) % MOD
             (number * sum) % MOD
         }.sum()
 
