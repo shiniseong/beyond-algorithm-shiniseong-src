@@ -18,18 +18,18 @@ class Solution {
         val nonZeroDigits = nString
             .filter { it != '0' }
 
-        var sum = 0.toBigInteger()
+        var sum = 0L
         nonZeroDigits.forEach { ch ->
-            sum = (sum + ch.digitToInt().toBigInteger()) % MOD
+            sum = (sum + ch.digitToInt().toLong()) % MOD
         }
 
         val xSource = nonZeroDigits
             .ifEmpty { "0" }
 
-        var x = 0.toBigInteger()
+        var x = 0.toLong()
         xSource.forEach { ch ->
-            x = (x * 10.toBigInteger()) % MOD
-            x += ch.digitToInt().toBigInteger() * sum
+            x = (x * 10.toLong()) % MOD
+            x += ch.digitToInt().toLong() * sum
             x %= MOD
         }
 
@@ -37,6 +37,6 @@ class Solution {
     }
 
     companion object {
-        private val MOD = (1_000_000_000 + 7).toBigInteger()
+        private const val MOD = (1_000_000_000 + 7).toLong()
     }
 }
