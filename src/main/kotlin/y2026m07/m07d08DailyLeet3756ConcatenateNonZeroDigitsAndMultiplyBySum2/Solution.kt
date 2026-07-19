@@ -4,39 +4,42 @@ class Solution {
     fun sumAndMultiply(
         s: String,
         queries: Array<IntArray>,
-    ): IntArray = queries.map { query ->
-        val start = query[0]
-        val end = query[1] + 1
+    ): IntArray {
+        val length = s.length
+        val nonZeroCount = IntArray(length + 1)
+        val digitSum = LongArray(length + 1)
+        val prefixX = LongArray(length + 1)
+        val powerOfTen = LongArray(length + 1)
+        powerOfTen[0] = 1L
 
-        val substring = s.substring(start, end)
-        sumAndMultiPlyNonZero(substring)
-    }
-        .toTypedArray()
-        .toIntArray()
+        s.forEachIndexed { idx, ch ->
+            val digit = ch.digitToInt()
+            digitSum[idx + 1] = digitSum[idx] + digit
+            powerOfTen[idx + 1] = powerOfTen[idx] * 10L % MOD
 
-    private fun sumAndMultiPlyNonZero(nString: String): Int {
-        val nonZeroDigits = nString
-            .filter { it != '0' }
-
-        var sum = 0L
-        nonZeroDigits.forEach { ch ->
-            sum = (sum + ch.digitToInt().toLong()) % MOD
+            if (digit == 0) {
+                nonZeroCount[idx + 1] = nonZeroCount[idx]
+                prefixX[idx + 1] = prefixX[idx]
+            } else {
+                nonZeroCount[idx + 1] = nonZeroCount[idx] + 1
+                prefixX[idx + 1] = (prefixX[idx] * 10L + digit) % MOD
+            }
         }
 
-        val xSource = nonZeroDigits
-            .ifEmpty { "0" }
+        return queries.map { query ->
+            val left = query[0]
+            val right = query[1]
 
-        var x = 0.toLong()
-        xSource.forEach { ch ->
-            x = (x * 10.toLong()) % MOD
-            x += ch.digitToInt().toLong() * sum
-            x %= MOD
-        }
+            val gapNonZeroCount = nonZeroCount[right + 1] - nonZeroCount[left]
+            val xLeftPart = prefixX[left] * powerOfTen[gapNonZeroCount] % MOD
+            val x = (prefixX[right + 1] - xLeftPart + MOD) % MOD
+            val sum = digitSum[right + 1] - digitSum[left]
 
-        return (x % MOD).toInt()
+            (x * sum % MOD).toInt()
+        }.toIntArray()
     }
 
     companion object {
-        private const val MOD = (1_000_000_000 + 7).toLong()
+        private const val MOD = 1_000_000_007L
     }
 }
