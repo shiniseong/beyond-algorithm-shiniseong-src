@@ -1,4 +1,4 @@
-package y2026m07.m07d26Shift2DGrid
+package y2026m07.m07d20DailyLeet1260Shift2DGrid
 
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
